@@ -77,8 +77,53 @@ If not, the pre-built Docker images may be a lot easier. See the
 [Zigbee2MQTT installation guide for running on Docker](https://www.zigbee2mqtt.io/guide/installation/02_docker.html),
 and remember to expose your Zigbee adapter to Docker!
 
+Once running, access the web interface at http://localhost:8080/
+
 ## Pair some devices
+Make sure your Zigbee2MQTT configuration has
+
+```permit_join: true```
+
+Then, for each temperature device, trigger pairing. (Often that means holding down a button
+for 5 seconds, or pushing a pin into the reset button hole for 5 seconds).
+
+You should see the devices pair and be configured in the Zigbee2MQTT web interace. It can
+take a little while for them to fully show up, don't be worried if they appear as an
+unknown device briefly!
+
 ## Testing that it's working so far
+
+To test that Zigbee2MQTT is working, head to the web interface at 
+http://localhost:8080/ , check that your devices are showing up, and have 
+temperatures showing.
+
+Next, verify that the Mosquitto MQTT server is working, and that updates from 
+the zigbee devices are being passed through. Connect to mosquitto to the special
+"all-topics topic" `#` with
+
+```mosquitto_sub -h localhost -t "#" -v```
+
+You should immediately see updates from Zigbee2MQTT itself, on topics with the
+`zigbee2mqtt/bridge/` prefix. Whenever a device sends an update, you should see
+those under `zigbee2mqtt/0x(address)`. (You probably want to rename them in the
+web interface later).
+
+## Using Telegraf to bridge from MQTT to InfluxDB
+
+Note - the latest InfluxDB packaged for Ubuntu 23.10 is still the 1.x family, 
+which lacks the web interface and other new features of the 2.x releases. You
+also need to configure Telegraf differently for InfluxDB 1.x and 2.x, so take
+care when following tutorials that you're using instructions for the version
+you're using!
+
+Install InfluxDB 1.x:
+```
+apt-get install influxdb influxdb-client
+systemctl enable influxdb
+systemctl start influxdb
+```
+
+*TODO the rest*
 
 ## Calibrating
 https://robertoostenveld.nl/sonoff-snzb02/
