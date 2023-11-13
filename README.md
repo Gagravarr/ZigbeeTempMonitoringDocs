@@ -116,12 +116,85 @@ also need to configure Telegraf differently for InfluxDB 1.x and 2.x, so take
 care when following tutorials that you're using instructions for the version
 you're using!
 
-Install InfluxDB 1.x:
+### Install Telegraf
+```apt-get telegraf```
+
+The default Telegraf configuration includes a lot of inputs about the host
+system that you probably don't want for Zigbee temperature monitoring. 
+You should disable most/all of these. Potentially even zap most of the
+`/etc/telegraf/telegraf.conf` file after the `[agent]` section. Then, 
+create `/etc/telegraf/telegraf.d/zigbee.conf` with following:
+
+```
+# Read Zigbee sensor data from MQTT
+[[inputs.mqtt_consumer]]
+  servers = ["tcp://localhost:1883"]
+  topics = ["zigbee2mqtt/#"]
+  data_format = "json"
+  # Use the name of the sensor for the "tag"
+  name_override = "zigbee"
+  topic_tag = "dev"
+ 
+# Strip the base topic (typically "zigbee2mqtt") 
+# from the dev tag using the regex processor
+[[processors.regex]]
+  namepass = ["zigbee"]
+ 
+  [[processors.regex.tags]]
+    key = "dev"
+    pattern = '^zigbee2mqtt/(?P<device>.+)$'
+    replacement = "${device}"
+
+# Don't include messages about the Zigbee2MQTT bridge itself
+# (also note the single square brackets used for this)
+[inputs.mqtt_consumer.tagdrop]
+  dev = ["zigbee2mqtt/bridge/*"]
+
+# Send to Influx v1
+[[outputs.influxdb]]
+  urls = ["http://127.0.0.1:8086"]
+  namepass = ["zigbee"]
+  database = "zigbee"
+  skip_database_creation = false
+```
+
+If you want to test Telegraf at this stage, comment out the
+`[[outputs.influxdb]]` section, add in this test output:
+```
+# Print to stdout for debugging
+# Disable this once you're happy everything works!
+[[outputs.file]]
+  files = ["stdout"]
+  data_format = "json"
+```
+Then run telegraf with 
+`telegraf --config /etc/telegraf/telegraf.conf --config-directory /etc/telegraf/telegraf.d/`
+ . It may take a few minutes to see anything reported, depending on how
+often your zigbee devices report in.
+
+### Install InfluxDB 1.x
 ```
 apt-get install influxdb influxdb-client
 systemctl enable influxdb
 systemctl start influxdb
 ```
+
+### Enable Telegraf (once InfluxDB is running for it to talk to)
+```
+systemctl enable telegraf
+systemctl start telegraf
+```
+
+### Confirm Telegraf is feeding InfluxDB
+Connect to your local InfluxDB server with the `influx` client.
+
+Do a `show databases` and ensure that the `zigbee` one is shown
+(normally at this stage you'll have `zigbee` and `internal`)
+
+Do a `show series on zigbee` and ensure that (after a few minutes)
+all your zigbee devices show up as their own series.
+
+## Grafana stuff
 
 *TODO the rest*
 
