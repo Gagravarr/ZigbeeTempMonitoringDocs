@@ -14,6 +14,34 @@ house, and don't need any actions taken with it, that's the route I opted
 for. The key bit of open source software I'm using is
 [Zigbee2MQTT](https://www.zigbee2mqtt.io/)
 
+## Broad Approach
+
+1. Temperature sensors send readings periodically, over zigbee
+1. Zigbee2MQTT processes sensor message, forwards to MQTT queue
+1. ???
+1. Graphs drawn
+
+Since most graphing tools want to be able to see values over a period of
+time, and simpler MQTT setups don't retain messages that have been read,
+we either need one of:
+
+1. Stream processing system like Flink or Pulsar
+1. Retain all messages in the queue, re-stream them every graph re-draw
+1. Send MQTT messages into an IoT or Time-Series database, graph from that
+
+I want to use [Grafana](https://grafana.com/) to draw the graphs. I found
+a bunch of tutorials for [InfluxDB](https://www.influxdata.com/products/influxdb-overview/) 
+to learn from / steal ideas from, so I opted for that. To sit between the
+MQTT queues and InfluxDB, I wet for 
+[Influx's Telegraf](https://github.com/influxdata/telegraf). That makes
+our approach:
+
+1. Temperature sensors send readings periodically, over zigbee
+1. Zigbee2MQTT processes sensor message, forwards to MQTT queue
+1. Telegraf reads messages from MQTT and forwards to InfluxDB
+1. InfluxDB holds time series data, doing aggregation and sampling
+1. Grafana querys InfluxDB then draws graphs 
+
 ## Buying some Zigbee temperature sensors
 
 I ordered a bunch of different ones from different manufacturors. All at the 
@@ -42,6 +70,24 @@ sudo systemctl start mosquitto
 ```
 
 ## Zigbee2MQTT
+
+Zigbee2MQTT is written in Node.js. If you're happy with `node` and `npm`, 
+follow the [Zigbee2MQTT installation guide for Linux](https://www.zigbee2mqtt.io/guide/installation/01_linux.html).
+If not, the pre-built Docker images may be a lot easier. See the
+[Zigbee2MQTT installation guide for running on Docker](https://www.zigbee2mqtt.io/guide/installation/02_docker.html),
+and remember to expose your Zigbee adapter to Docker!
+
+## Pair some devices
+## Testing that it's working so far
+
+## Calibrating
+https://robertoostenveld.nl/sonoff-snzb02/
+
+ hdc1080
+https://randomnerdtutorials.com/dht11-vs-dht22-vs-lm35-vs-ds18b20-vs-bme280-vs-bmp180/
+https://forum.arduino.cc/t/compare-different-i2c-temperature-and-humidity-sensors-sht2x-sht3x-sht85/599609/12
+
+# More to follow!
 
 ## Threads
 https://social.earth.li/notice/Ab9larIg8eGJbapInI
