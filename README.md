@@ -116,6 +116,11 @@ also need to configure Telegraf differently for InfluxDB 1.x and 2.x, so take
 care when following tutorials that you're using instructions for the version
 you're using!
 
+These steps assuming you're using the InfluxDB v1.x that is packaged by 
+Ubuntu. If you want 2.x you may want to [manually install the latest
+version](https://docs.influxdata.com/influxdb/v2/install/?t=Linux) (it's only
+a handful of files), or [run the Docker version](https://docs.influxdata.com/influxdb/v2/install/?t=Docker)
+
 ### Install Telegraf
 ```apt-get telegraf```
 
@@ -195,7 +200,38 @@ Do a `show series on zigbee` and ensure that (after a few minutes)
 all your zigbee devices show up as their own series.
 
 ## Grafana stuff
+### Grafana Cloud
+Grafana offer a free cloud hosted version.
 
+It is possible to have Telegraf feed data to a cloud-hosted Grafana
+via the [Grafana Cloud Prometheus server and the Influx compatible
+endpoint](https://grafana.com/docs/grafana-cloud/send-data/metrics/metrics-influxdb/push-from-telegraf/).
+
+Make sure that you create a write access token, not a read access
+token, when setting the token up from your Prometheus hosted metrics
+page! Your telegraf config will want to be something like
+```
+[[outputs.influxdb]]
+  urls = ["https://influx-prod-ZZ-prod-eu-west-2.grafana.net/api/v1/push/influx"]
+  namepass = ["zigbee"]
+  database = "telegraf_metrics"
+  skip_database_creation = true
+  user_agent = "telegraf"
+  username = "1234567"
+  password = "glc_abcdefg="
+```
+
+### Grafana Docker
+Follow the [Grafana Docker setup/install guide](https://grafana.com/docs/grafana/latest/setup-grafana/installation/docker/)
+
+Be sure to provide a Docker Volume or a Bind Mount, so that your dashboards
+and settings aren't lost when pods are recreated!
+
+### Grafana Packages for Ubuntu
+https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/
+*TODO the rest*
+
+### Graphing temperatures with Grafana
 *TODO the rest*
 
 ## Calibrating
