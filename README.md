@@ -102,6 +102,9 @@ To test that Zigbee2MQTT is working, head to the web interface at
 http://localhost:8080/ , check that your devices are showing up, and have 
 temperatures showing.
 
+It should look something like:
+![Zigbee2MQTT devices list](images/z2m-devices.png)
+
 Next, verify that the Mosquitto MQTT server is working, and that updates from 
 the zigbee devices are being passed through. Connect to mosquitto to the special
 "all-topics topic" `#` with
@@ -112,6 +115,10 @@ You should immediately see updates from Zigbee2MQTT itself, on topics with the
 `zigbee2mqtt/bridge/` prefix. Whenever a device sends an update, you should see
 those under `zigbee2mqtt/0x(address)`. (You probably want to rename them in the
 web interface later).
+
+You can also then see a dashboard in Zigbee2MQTT showing an overview of all
+your devices and their temperatures:
+![Zigbee2MQTT dashboard](images/z2m-dashboard.png)
 
 ## Using Telegraf to bridge from MQTT to InfluxDB
 
@@ -233,11 +240,29 @@ Be sure to provide a Docker Volume or a Bind Mount, so that your dashboards
 and settings aren't lost when pods are recreated!
 
 ### Grafana Packages for Ubuntu
-https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/
-*TODO the rest*
+Grafana isn't packaged by Canonical for Ubuntu, so you'll have to add the
+Grafana apt repo before you can install. Full details of the steps to add
+that and install Grafana on their
+[Ubuntu + Debian setup/install guide](https://grafana.com/docs/grafana/latest/setup-grafana/installation/debian/)
 
 ### Graphing temperatures with Grafana
-*TODO the rest*
+You first need to add an 
+[InfluxDB data source](https://grafana.com/docs/grafana/latest/datasources/influxdb/)
+pointing to your InfluxDB database into to Grafana, before you can start 
+drawing graphs. 
+
+Head to
+http://localhost:3000/connections/add-new-connection
+
+*TODO rest*
+
+![Grafana Query for Temperature Data via InfluxDB](images/grafana-query.png)
+
+![Grafana Graphing of Temperature Data](images/grafana-dashboard.png)
+
+Note that query is slightly different if you're using the Grafana Cloud 
+version, as for that you'll be querying Prometheus not InfluxDB
+![Grafana Cloud Query for Temperature Data](images/grafana-cloud-query.png)
 
 ## Calibrating
 https://robertoostenveld.nl/sonoff-snzb02/
