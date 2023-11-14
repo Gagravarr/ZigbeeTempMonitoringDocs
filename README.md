@@ -48,6 +48,11 @@ I ordered a bunch of different ones from different manufacturors. All at the
 cheaper end of pricing! So far, none of them are amazing, and none are 
 terrible. Plenty of comparisons and reviews exist online!
 
+Most needed some level of calibration, see the [calibration 
+section](#Calibrating) later for more on that.
+
+![Quite a few different cheap Zigbee temperature sensors](images/devices.jpg)
+
 ## Buying a Zigbee adapter
 
 Based on instructions like [Flashing the CC2531 USB stick (Zigbee2MQTT)](https://www.zigbee2mqtt.io/guide/adapters/flashing/flashing_the_cc2531.html),
