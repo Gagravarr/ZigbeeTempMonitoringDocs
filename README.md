@@ -271,6 +271,7 @@ For a good overview of what chips you should prefer, and why, see
  * https://randomnerdtutorials.com/dht11-vs-dht22-vs-lm35-vs-ds18b20-vs-bme280-vs-bmp180/
  * https://forum.arduino.cc/t/compare-different-i2c-temperature-and-humidity-sensors-sht2x-sht3x-sht85/599609/12
  * https://www.kandrsmith.org/RJS/Misc/hygrometers.html
+ * https://www.kandrsmith.org/RJS/Misc/Hygrometers/calib_many.html
  * https://home-assistant-guide.com/guide/the-best-temperature-and-humidity-sensor-for-esphome/
 
 For example, based on information from the [hackaday custom firmware for
@@ -286,9 +287,13 @@ is a saturated salt box. See
 [robertoostenveld.nl/sonoff-snzb02/](https://robertoostenveld.nl/sonoff-snzb02/)
 for details and instructions.
 
-....
+Once you have identified how much of a change your sensor needs, in absolute
+terms (eg -0.5 degrees C, +5% humidity), in Zigbee2MQTT go to the 
+`Settings (specific)` tab for the device. Enter the calibration offsets
+required into the temperature and/or humidity boxes. Values are auto-saved,
+but won't apply to previous readings, only new ones.
 
-# Bit more to follow, but we're almost done!
+![Zigbee2MQTT calibration for a device](images/z2m-calibrate.png)
 
 ## Threads
 https://social.earth.li/notice/Ab9larIg8eGJbapInI
