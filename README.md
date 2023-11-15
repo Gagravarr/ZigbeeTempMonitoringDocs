@@ -265,13 +265,30 @@ version, as for that you'll be querying Prometheus not InfluxDB
 ![Grafana Cloud Query for Temperature Data](images/grafana-cloud-query.png)
 
 ## Calibrating
-https://robertoostenveld.nl/sonoff-snzb02/
+Many of the cheaper sensors have "not-great" temperature sensor chips inside them.
 
- hdc1080
-https://randomnerdtutorials.com/dht11-vs-dht22-vs-lm35-vs-ds18b20-vs-bme280-vs-bmp180/
-https://forum.arduino.cc/t/compare-different-i2c-temperature-and-humidity-sensors-sht2x-sht3x-sht85/599609/12
+For a good overview of what chips you should prefer, and why, see
+ * https://randomnerdtutorials.com/dht11-vs-dht22-vs-lm35-vs-ds18b20-vs-bme280-vs-bmp180/
+ * https://forum.arduino.cc/t/compare-different-i2c-temperature-and-humidity-sensors-sht2x-sht3x-sht85/599609/12
+ * https://www.kandrsmith.org/RJS/Misc/hygrometers.html
+ * https://home-assistant-guide.com/guide/the-best-temperature-and-humidity-sensor-for-esphome/
 
-# More to follow!
+For example, based on information from the [hackaday custom firmware for
+SNZB-02](https://hackaday.io/project/187193-sonoff-snzb-02-diy), we can see 
+that the Sonoff SNZB-02 has the HDC1080 sensor. This is generally fairly well
+regarded, but not the best possible. So, you may find you need to calibrate
+the sensors.
+
+To calibrate humiditity, the easiest way is to put the sensor in an 
+environment of known humidity, then tweak the value as required for it
+to read correctly. The "easiest" way for most people at home to do that
+is a saturated salt box. See
+[robertoostenveld.nl/sonoff-snzb02/](https://robertoostenveld.nl/sonoff-snzb02/)
+for details and instructions.
+
+....
+
+# Bit more to follow, but we're almost done!
 
 ## Threads
 https://social.earth.li/notice/Ab9larIg8eGJbapInI
