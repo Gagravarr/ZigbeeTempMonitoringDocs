@@ -280,6 +280,9 @@ that the Sonoff SNZB-02 has the HDC1080 sensor. This is generally fairly well
 regarded, but not the best possible. So, you may find you need to calibrate
 the sensors.
 
+To calibrate temperature, a physical thermomiter is probably best and
+simplest! IR-based ones often struggle with getting "background" temperatures.
+
 To calibrate humiditity, the easiest way is to put the sensor in an 
 environment of known humidity, then tweak the value as required for it
 to read correctly. The "easiest" way for most people at home to do that
@@ -291,9 +294,11 @@ Once you have identified how much of a change your sensor needs, in absolute
 terms (eg -0.5 degrees C, +5% humidity), in Zigbee2MQTT go to the 
 `Settings (specific)` tab for the device. Enter the calibration offsets
 required into the temperature and/or humidity boxes. Values are auto-saved,
-but won't apply to previous readings, only new ones.
+but won't apply to previous readings, only new ones. Oh, and they only apply
+to values received, they aren't sent to the sensor for it to correct with,
+so any displays will continue to show the un-corrected values!
 
 ![Zigbee2MQTT calibration for a device](images/z2m-calibrate.png)
 
 ## Threads
-https://social.earth.li/notice/Ab9larIg8eGJbapInI
+ * https://social.earth.li/notice/Ab9larIg8eGJbapInI
