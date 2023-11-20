@@ -268,8 +268,14 @@ drawing graphs.
 
 Head to
 http://localhost:3000/connections/add-new-connection
+and add a new InfluxDB data source. If running Grafana locally, the connection
+URL should be http://localhost:8086/ , while if you're running Grafana in
+Docker you need to point it back to your host machine with something like
+http://host.docker.internal:8086/ . You also need to specify the database
+to connect to, as setup in Telegraf, eg `zigbee`
 
-*TODO rest*
+Once the data source connection is setup, it's time to use it! You'll want
+a query something like this for your dashboard:
 
 ![Grafana Query for Temperature Data via InfluxDB](images/grafana-query.png)
 
