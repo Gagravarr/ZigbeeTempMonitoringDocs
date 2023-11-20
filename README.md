@@ -14,6 +14,11 @@ house, and don't need any actions taken with it, that's the route I opted
 for. The key bit of open source software I'm using is
 [Zigbee2MQTT](https://www.zigbee2mqtt.io/)
 
+Note that battery-powered Zigbee temperature sensors only check in (measure 
+then transmit) when they feel like it, which may only be a few times an hour.
+For more real-time measuring, and especially if you want to control your
+heating, you probably want a different sensor platform/approach!
+
 ## Broad Approach
 
 1. Temperature sensors send readings periodically, over zigbee
@@ -95,6 +100,16 @@ for 5 seconds, or pushing a pin into the reset button hole for 5 seconds).
 You should see the devices pair and be configured in the Zigbee2MQTT web interace. It can
 take a little while for them to fully show up, don't be worried if they appear as an
 unknown device briefly!
+
+If you want to be able to easily see when an already-paired device last checked in,
+you will likely want to enable 
+[`last_seen`](https://www.zigbee2mqtt.io/guide/configuration/mqtt.html#mqtt-behaviour)
+in your Zigbee2MQTT configuration, eg
+
+```
+advanced:
+  last_seen: 'ISO_8601'
+```
 
 ## Testing that it's working so far
 
