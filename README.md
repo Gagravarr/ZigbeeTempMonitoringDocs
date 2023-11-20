@@ -283,6 +283,8 @@ the sensors.
 To calibrate temperature, a physical thermomiter is probably best and
 simplest! IR-based ones often struggle with getting "background" temperatures.
 
+![Calibrating with a kitchen thermomiter](images/calibrating.jpg)
+
 To calibrate humiditity, the easiest way is to put the sensor in an 
 environment of known humidity, then tweak the value as required for it
 to read correctly. The "easiest" way for most people at home to do that
