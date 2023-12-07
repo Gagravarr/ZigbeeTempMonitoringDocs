@@ -166,9 +166,14 @@ create `/etc/telegraf/telegraf.d/zigbee.conf` with following:
   # Use the name of the sensor for the "tag"
   name_override = "zigbee"
   topic_tag = "dev"
+
+  # If the topic is in the Floor/Room/Device format, add extra tags
+  [[inputs.mqtt_consumer.topic_parsing]]
+    topic = "zigbee2mqtt/+/+/+"
+    tags = "_/floor/room/device"
  
 # Strip the base topic (typically "zigbee2mqtt") 
-# from the dev tag using the regex processor
+# from the new dev tag using the regex processor
 [[processors.regex]]
   namepass = ["zigbee"]
  
